@@ -3,5 +3,38 @@
 version = 3
 
 [[package]]
-name = "bootiful"
+name = "app"
+version = "0.1.0"
+dependencies = [
+ "boot",
+ "hal",
+]
+
+[[package]]
+name = "boot"
+version = "0.1.0"
+dependencies = [
+ "cc",
+ "regs",
+]
+
+[[package]]
+name = "cc"
+version = "1.0.73"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2fff2a6927b3bb87f9595d67196a70493f627687a71d87a0d692242c33f58c11"
+
+[[package]]
+name = "common"
+version = "0.1.0"
+
+[[package]]
+name = "hal"
+version = "0.1.0"
+dependencies = [
+ "regs",
+]
+
+[[package]]
+name = "regs"
 version = "0.1.0"

@@ -1,130 +1,124 @@
-INCLUDE memory-cb.x
+INCLUDE defaults.x
 
-/* The entry point is the reset handler */
-ENTRY(Reset);
-EXTERN(Default_Int_Handler);
-
-PROVIDE(SFT_Int_Handler = Default_Int_Handler);
-PROVIDE(TMR_Int_Handler = Default_Int_Handler);
-PROVIDE(BWEI_Int_Handler = Default_Int_Handler);
-PROVIDE(PMOVI_Int_Handler = Default_Int_Handler);
-PROVIDE(WWDGT_Int_Handler = Default_Int_Handler);
-PROVIDE(LVD_Int_Handler = Default_Int_Handler);
-PROVIDE(Tamper_Int_Handler = Default_Int_Handler);
-PROVIDE(RTC_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(FMC_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(RCU_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line0_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line1_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line2_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line3_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line4_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan0_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan1_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan2_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan3_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan4_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan5_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA0_Chan6_Int_Handler = Default_Int_Handler);
-PROVIDE(ADC0to1_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(CAN0_Tx_Int_Handler = Default_Int_Handler);
-PROVIDE(CAN0_Rx0_Int_Handler = Default_Int_Handler);
-PROVIDE(CAN0_Rx1_Int_Handler = Default_Int_Handler);
-PROVIDE(CAN0_EWMC_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line9to5_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer0_Break_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer0_Update_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer0_Trig_Chan_Com_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer0_Chan_Cap_Com_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer1_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer2_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer3_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(I2C0_Event_Int_Handler = Default_Int_Handler);
-PROVIDE(I2C0_Error_Int_Handler = Default_Int_Handler);
-PROVIDE(I2C1_Event_Int_Handler = Default_Int_Handler);
-PROVIDE(I2C1_Error_Int_Handler = Default_Int_Handler);
-PROVIDE(SPI0_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(SPI1_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(USART0_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(USART1_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(USART2_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(EXTI_Line15to10_Int_Handler = Default_Int_Handler);
-PROVIDE(RTC_Alarm_Int_Handler = Default_Int_Handler);
-PROVIDE(USBFS_Wakeup_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer4_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(SPI2_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(UART3_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(UART4_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer5_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(Timer6_Global_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA1_Chan0_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA1_Chan1_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA1_Chan2_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA1_Chan3_Int_Handler = Default_Int_Handler);
-PROVIDE(DMA1_Chan4_Int_Handler = Default_Int_Handler);
-PROVIDE(Can1_Tx_Int_Handler = Default_Int_Handler);
-PROVIDE(Can1_Rx0_Int_Handler = Default_Int_Handler);
-PROVIDE(Can1_Rx1_Int_Handler = Default_Int_Handler);
-PROVIDE(Can1_EWMC_Int_Handler = Default_Int_Handler);
-PROVIDE(USBFS_Global_Int_Handler = Default_Int_Handler);
+ENTRY(_start);
 
 SECTIONS
 {
-  PROVIDE(_stack_start = ORIGIN(RAM) + LENGTH(RAM));
+    _stack_size = 2K;
 
-  .vector_table ORIGIN(FLASH) :
-  {
-    LONG(_stack_start);
-    KEEP(*(.vector_table.reset));
-    KEEP(*(.vector_table.interrupts));
-  } >FLASH
+    .text ORIGIN(REGION_TEXT) : ALIGN(4)
+    {
+        _stext = .;
+        KEEP(*(.vectors));
+        KEEP(*(.init .init.*));
+        . = ALIGN(4);
 
-  PROVIDE(_stext = ADDR(.vector_table) + SIZEOF(.vector_table));
+        *(.text .text.*);
 
-  .text _stext :
-  {
-    PROVIDE(__stext = .);
-    *(.text .text.*);
-    . = ALIGN(4);
-    PROVIDE(__etext = .);
-  } >FLASH
+        . = ALIGN(4);
+        _etext = .;
+    } > REGION_TEXT
 
-  .rodata : ALIGN(4)
-  {
-    . = ALIGN(4);
-    PROVIDE(__srodata = .);
-    *(.rodata .rodata.*);
-    . = ALIGN(4);
-    $(COMMON);
-    . = ALIGN(4);
-    PROVIDE(__erodata = .);
-  } > FLASH
+    .rodata : ALIGN(4)
+    {̦
+        *(.srodata .srodata.*);
+        *(.rodata .rodata.*);
 
-  .data : ALIGN(4)
-  {
-    . = ALIGN(4);
-    PROVIDE(__sdata = .);
-    *(.data .data.*);
-    . = ALIGN(4);
-    PROVIDE(__edata = .);
-  } > RAM AT>FLASH
+        . = ALIGN(4);
+    } > REGION_RODATA
 
-  PROVIDE(__sidata = LOADADDR(.data));
+    .stack (NOLOAD) : ALIGN(16)
+    {
+        _stack_bottom = .;
+        . = . + _stack_size;
+        . = ALIGN(16);
+        _stack_top = .;
+    } > REGION_STACK
 
-  .bss (NOLOAD) : ALIGN(4)
-  {
-    . = ALIGN(4);
-    PROVIDE(__sbss = .);
-    *(.bss .bss.*);
-    . = ALIGN(4);
-    PROVIDE(__ebss = .);
-  } > RAM AT>FLASH
+    .data : ALIGN(4)
+    {
+        _sidata = LOADADDR(.data);
+        _sdata = .;
 
-  /DISCARD/ :
-  {
-    *(.eh_frame);
-    *(.debug*);
-  }
+        PROVIDE(__global_pointer$ = . + 0x800);
 
-  PROVIDE(__sheap = __ebss);
+        *(.sdata .sdata.* .sdata2 .sdata2.*);
+        *(.data .data.*);
+
+        . = ALIGN(4);
+        _edata = .;
+    } > REGION_DATA AT > REGION_RODATA
+
+    .bss (NOLOAD) : ALIGN(4)
+    {
+        _sbss = .;
+
+        *(.sbss .sbss.*);
+        *(.bss .bss.*);
+
+        . = ALIGN(4);
+        _ebss = .;
+    } > REGION_BSS
+
+    .heap (NOLOAD) : ALIGN(4)
+    {
+        _sheap = .;
+        . = ORIGIN(RAM) + LENGTH(RAM);
+        _eheap = .;
+    } > REGION_HEAP
+
+    .got (INFO) :
+    {
+        KEEP(*(.got .got.*));
+    }
+
+    .eh_frame (INFO) : { KEEP(*(.eh_frame)); }
+    .eh_frame_hdr (INFO) : { *(.eh_frame_hdr); }
+
+    ASSERT(ORIGIN(REGION_TEXT) % 4 == 0, "
+    ERROR: The start of the REGION_TEXT must be 4-byte aligned")
+
+    ASSERT(ORIGIN(REGION_RODATA) % 4 == 0, "
+    ERROR: The start of the REGION_RODATA must be 4-byte aligned")
+
+    ASSERT(ORIGIN(REGION_DATA) % 4 == 0, "
+    ERROR: the start of the REGION_DATA must be 4-byte aligned")
+
+    ASSERT(ORIGIN(REGION_HEAP) % 4 == 0, "
+    ERROR: the start of the REGION_HEAP must be 4-byte aligned")
+
+    ASSERT(ORIGIN(REGION_TEXT) % 4 == 0, "
+    ERROR: the start of the REGION_TEXT must be 4-byte aligned")
+
+    ASSERT(ORIGIN(REGION_STACK) % 4 == 0, "
+    ERROR: the start of the REGION_STACK must be 4-byte aligned")
+
+    ASSERT(_stext % 4 == 0, "
+    ERROR: `_stext` must be 4-byte aligned")
+
+    ASSERT(_sdata % 4 == 0 && _edata % 4 == 0, "
+    BUG: .data is not 4-byte aligned")
+
+    ASSERT(_sidata % 4 == 0, "
+    BUG: the LMA of .data is not 4-byte aligned")
+
+    ASSERT(_sbss % 4 == 0 && _ebss % 4 == 0, "
+    BUG: .bss is not 4-byte aligned")
+
+    ASSERT(_sheap % 4 == 0, "
+    BUG: start of .heap is not 4-byte aligned")
+
+    ASSERT(_stack_top % 16 == 0, "
+    BUG: Stack pointer is not 16-byte aligned")
+
+    ASSERT(_stext + SIZEOF(.text) < ORIGIN(REGION_TEXT) + LENGTH(REGION_TEXT), "
+    ERROR: The .text section must be placed inside the REGION_TEXT region.
+    Set _stext to an address smaller than 'ORIGIN(REGION_TEXT) + LENGTH(REGION_TEXT)'")
+
+    ASSERT(SIZEOF(.got) == 0, "
+    .got section detected in the input files. Dynamic relocations are not
+    supported. If you are linking to C code compiled using the `gcc` crate
+    then modify your build script to compile the C code _without_ the
+    -fPIC flag. See the documentation of the `gcc::Config.fpic` method for
+    details.")
 }

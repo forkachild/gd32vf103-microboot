@@ -1,0 +1,74 @@
+EXTERN(Default_IRQHandler);
+EXTERN(Default_Exception_Handler);
+
+/* Weak references to IRQ Handlers */
+PROVIDE(ECLIC_SFT_IRQHandler = Default_IRQHandler);
+PROVIDE(ECLIC_TMR_IRQHandler = Default_IRQHandler);
+PROVIDE(ECLIC_BWEI_IRQHandler = Default_IRQHandler);
+PROVIDE(ECLIC_PMOVI_IRQHandler = Default_IRQHandler);
+PROVIDE(WWDGT_IRQHandler = Default_IRQHandler);
+PROVIDE(LVD_IRQHandler = Default_IRQHandler);
+PROVIDE(TAMPER_IRQHandler = Default_IRQHandler);
+PROVIDE(RTC_IRQHandler = Default_IRQHandler);
+PROVIDE(FMC_IRQHandler = Default_IRQHandler);
+PROVIDE(RCU_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI0_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI1_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI2_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI3_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI4_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel0_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel1_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel2_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel3_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel4_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel5_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA0_Channel6_IRQHandler = Default_IRQHandler);
+PROVIDE(ADC0_1_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN0_TX_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN0_RX0_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN0_RX1_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN0_EWMC_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI5_9_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER0_BRK_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER0_UP_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER0_TRG_CMT_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER0_Channel_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER1_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER2_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER3_IRQHandler = Default_IRQHandler);
+PROVIDE(I2C0_EV_IRQHandler = Default_IRQHandler);
+PROVIDE(I2C0_ER_IRQHandler = Default_IRQHandler);
+PROVIDE(I2C1_EV_IRQHandler = Default_IRQHandler);
+PROVIDE(I2C1_ER_IRQHandler = Default_IRQHandler);
+PROVIDE(SPI0_IRQHandler = Default_IRQHandler);
+PROVIDE(SPI1_IRQHandler = Default_IRQHandler);
+PROVIDE(USART0_IRQHandler = Default_IRQHandler);
+PROVIDE(USART1_IRQHandler = Default_IRQHandler);
+PROVIDE(USART2_IRQHandler = Default_IRQHandler);
+PROVIDE(EXTI10_15_IRQHandler = Default_IRQHandler);
+PROVIDE(RTC_Alarm_IRQHandler = Default_IRQHandler);
+PROVIDE(USBFS_WKUP_IRQHandler = Default_IRQHandler);
+PROVIDE(EXMC_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER4_IRQHandler = Default_IRQHandler);
+PROVIDE(SPI2_IRQHandler = Default_IRQHandler);
+PROVIDE(UART3_IRQHandler = Default_IRQHandler);
+PROVIDE(UART4_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER5_IRQHandler = Default_IRQHandler);
+PROVIDE(TIMER6_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA1_Channel0_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA1_Channel1_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA1_Channel2_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA1_Channel3_IRQHandler = Default_IRQHandler);
+PROVIDE(DMA1_Channel4_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN1_TX_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN1_RX0_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN1_RX1_IRQHandler = Default_IRQHandler);
+PROVIDE(CAN1_EWMC_IRQHandler = Default_IRQHandler);
+PROVIDE(USBFS_IRQHandler = Default_IRQHandler);
+
+/* Weak reference to Exception Handler */
+PROVIDE(Exception_Handler = Default_Exception_Handler);
+
+/* Weak reference to idle state after init */
+PROVIDE(user_main = idle);
